@@ -36,35 +36,37 @@ public class LoginActivity extends BaseActivity {
         login = (Button) findViewById(R.id.login);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        isRemember = preferences.getBoolean("rememberPassword",false);
+        isRemember = preferences.getBoolean("rememberPassword", false);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String account = accountEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
-                if(account.equals("admin")&&password.equals("123456")){
+                if (account.equals("admin") && password.equals("123456")) {
                     editor = preferences.edit();
-                    if(rememberPassword.isChecked()){
-                        editor.putString("account",account);
-                        editor.putString("password",password);
-                        editor.putBoolean("rememberPassword",true);
-                    }else{
+                    if (rememberPassword.isChecked()) {
+                        editor.putString("account", account);
+                        editor.putString("password", password);
+                        editor.putBoolean("rememberPassword", true);
+                    } else {
                         editor.clear();
                     }
                     editor.commit();
-                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-                }else{
-                    Toast.makeText(LoginActivity.this,"account or password is invalid",Toast.LENGTH_SHORT).show();
+                } else if (account.equals("") && password.equals("")) {
+                    Toast.makeText(LoginActivity.this,"account or password cannot be empty",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this, "account or password is invalid", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        if(isRemember){
-            accountEditText.setText(preferences.getString("account",""));
-            passwordEditText.setText(preferences.getString("password",""));
+        if (isRemember) {
+            accountEditText.setText(preferences.getString("account", ""));
+            passwordEditText.setText(preferences.getString("password", ""));
             rememberPassword.setChecked(isRemember);
         }
     }
